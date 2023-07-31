@@ -1,21 +1,26 @@
->>>markdown
-# Directors
-Who are the top directors?  What did they direct? In each genres?  Who do they work with?
->>>malloy
-import "imdb.malloy" 
->>>markdown
-## Top directors and their 5 best movies
->>>malloy
-run: movies->by_name + {
-  where: principals.category = 'director'
-  nest: by_title + { limit: 5}
-  limit: 10
-}
->>>markdown
-## Top comedy directors and their 5 best movies
->>>malloy
-run: movies->by_name + {
-  where: principals.category = 'director', genres.value = 'Comedy'
-  nest: by_title + { limit: 5}
-  limit: 10
-}
+[
+  {
+    "kind": 1,
+    "language": "markdown",
+    "value": "# Hello",
+    "metadata": {}
+  },
+  {
+    "kind": 1,
+    "language": "markdown",
+    "value": "## Hmmm\ndsfadsfasd",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "malloy",
+    "value": "import \"imdb.malloy\"",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "malloy",
+    "value": "query: tom_hanks_movies is movies->{\n  where: principals.people.primaryName ~ r'Tom Hanks'\n  group_by: tconst\n}\n# dashboard\nrun: movies -> {\n  join_one: x is from(-> tom_hanks_movies) with tconst\n  where: x.tconst != null and startYear < 2010\n  nest: works_with is by_name + {\n    nest: by_role_list is by_job_category\n    limit: 10\n    order_by: 4 desc\n  }\n  nest: title_list_detail is  {\n    group_by: primaryTitle, startYear\n    order_by: 2 desc\n  }\n  nest: by_genre_bar_chart is {\n    where: startYear != null\n    group_by: genres.value\n    aggregate: title_count\n    aggregate: avg_year is startYear.avg()\n  }\n  nest: titles_dashboard\n}\n",
+    "metadata": {}
+  }
+]
